@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentResults;
+
+namespace GloDb
+{
+    public static class Extensions
+    {
+        public static IEnumerable<List<T>> Partition<T>(this IList<T> source, int size)
+        {
+            for (var i = 0; i < Math.Ceiling(source.Count / (double) size); i++)
+                yield return new List<T>(source.Skip(size * i).Take(size));
+        }
+    }
+}

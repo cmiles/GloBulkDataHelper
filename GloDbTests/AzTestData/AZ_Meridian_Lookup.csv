@@ -1,0 +1,5 @@
+state_code,meridian_code,meridian_name,state_default
+"AZ","14","Gila-Salt River"
+"AZ","22","Navajo"
+"AZ","27","San Bernardino"
+"AZ","99","No Meridian Available"
