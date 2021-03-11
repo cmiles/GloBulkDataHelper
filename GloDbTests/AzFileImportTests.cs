@@ -44,6 +44,28 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(firstTestRecord, firstRecord);
+
+            var midRecord = imports[611];
+            var midTestRecord = new AuthorityLookupCsv
+            {
+                authority_code = "278501",
+                statutory_ref = "82 Stat. 870",
+                act_treaty = "September 26, 1968",
+                entry_class = "Sale-Pls Unintentional"
+            };
+
+            Assert.AreEqual(midTestRecord, midRecord);
+
+            var lastRecord = imports.Last();
+            var lastTestRecord = new AuthorityLookupCsv
+            {
+                authority_code = "999999",
+                statutory_ref = string.Empty,
+                act_treaty = "January 1, 1999",
+                entry_class = "No Authority Available"
+            };
+
+            Assert.AreEqual(lastTestRecord, lastRecord);
         }
 
 
