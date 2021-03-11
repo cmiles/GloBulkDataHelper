@@ -1,6 +1,8 @@
-﻿namespace GloDb.GloCsvFile
+﻿// ReSharper disable InconsistentNaming - Matching Names in Actual File
+
+namespace GloDb.GloCsvFile
 {
-    public class LandOfficeLookupCsv
+    public record LandOfficeLookupCsv
     {
         public int l_o_code { get; set; }
 

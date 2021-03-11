@@ -12,6 +12,17 @@ namespace GloDb
 {
     public static class GloCsvFileImporter
     {
+        public static List<AuthorityLookupCsv> AuthorityLookupCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Authority_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<AuthorityLookupCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Authority_Lookup Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
         private static IEnumerable<List<T>> FileRecordBatches<T>(string fileName, IProgress<string> progress)
             where T : class, new()
         {
@@ -106,7 +117,7 @@ namespace GloDb
                     remainingString = remainingString[(index + 2)..];
                 }
 
-                valueList.Add(remainingString[1..^2]);
+                valueList.Add(remainingString[1..^1]);
 
                 //Support for omitting the last comma if there is no last value
                 if (valueList.Count == headerNumberPropertyMatches.Count - 1) valueList.Add(string.Empty);
@@ -120,7 +131,7 @@ namespace GloDb
                     relatedValue = string.IsNullOrWhiteSpace(relatedValue) ? null : relatedValue.Trim();
 
                     if (loopProperties.property.PropertyType == typeof(string))
-                        loopProperties.property.SetValue(newObject, relatedValue);
+                        loopProperties.property.SetValue(newObject, relatedValue ?? string.Empty);
                     if (loopProperties.property.PropertyType == typeof(int))
                         loopProperties.property.SetValue(newObject, int.Parse(valueList[loopProperties.columnNumber]));
                     if (loopProperties.property.PropertyType == typeof(int?))

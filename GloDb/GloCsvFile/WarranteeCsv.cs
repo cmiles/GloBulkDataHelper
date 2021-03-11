@@ -1,6 +1,8 @@
-﻿namespace GloDb.GloCsvFile
+﻿// ReSharper disable InconsistentNaming - Matching Names in Actual File
+
+namespace GloDb.GloCsvFile
 {
-    public class WarranteeCsv
+    public record WarranteeCsv
     {
         public string accession_nr { get; set; }
 

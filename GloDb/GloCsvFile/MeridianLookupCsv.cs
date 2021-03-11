@@ -1,6 +1,8 @@
-﻿namespace GloDb.GloCsvFile
+﻿// ReSharper disable InconsistentNaming - Matching Names in Actual File
+
+namespace GloDb.GloCsvFile
 {
-    public class MeridianLookupCsv
+    public record MeridianLookupCsv
     {
         public int meridian_code { get; set; }
 

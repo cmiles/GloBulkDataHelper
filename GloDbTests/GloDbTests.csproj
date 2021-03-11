@@ -7,9 +7,59 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Az-2021-03-01-TestData\AZ_Authority_Lookup.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_County.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_County_Lookup.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Doc_Class_Lookup.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Land_Description.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Land_Office_Lookup.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Meridian_Lookup.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Patent.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Patentee.csv" />
+    <None Remove="Az-2021-03-01-TestData\AZ_Warrantee.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Az-2021-03-01-TestData\AZ_Authority_Lookup.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_County.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_County_Lookup.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Doc_Class_Lookup.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Land_Description.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Land_Office_Lookup.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Meridian_Lookup.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Patent.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Patentee.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Az-2021-03-01-TestData\AZ_Warrantee.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0-beta.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0-preview-20210219-03" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GloDb\GloDb.csproj" />
   </ItemGroup>
 
 </Project>

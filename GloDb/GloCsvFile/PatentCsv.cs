@@ -1,8 +1,10 @@
-﻿using System;
+﻿// ReSharper disable InconsistentNaming - Matching Names in Actual File
+
+using System;
 
 namespace GloDb.GloCsvFile
 {
-    public class PatentCsv
+    public record PatentCsv
     {
         public string accession_nr { get; set; }
 
