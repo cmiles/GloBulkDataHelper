@@ -18,7 +18,40 @@ namespace GloDb
 
             var fileRecords = FileRecords<AuthorityLookupCsv>(fileName, progress).ToList();
 
-            progress.Report($"Finished Authority_Lookup Import - {DateTime.Now}");
+            progress.Report($"Finished Authority_Lookup Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<CountyCsv> CountyCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting County Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<CountyCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished County Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<CountyLookupCsv> CountyLookupCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting County_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<CountyLookupCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished County_Lookup Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<DocumentClassLookupCsv> DocClassLookupCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Doc_Class_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<DocumentClassLookupCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Doc_Class_Lookup Csv Import - {DateTime.Now}");
 
             return fileRecords;
         }
@@ -78,7 +111,7 @@ namespace GloDb
                 if (!fileLine.EndsWith("\""))
                 {
                     accumulate = true;
-                    accumulatedLine = accumulatedLine + fileLine;
+                    accumulatedLine = accumulatedLine + fileLine + "\n";
                     totalSize -= 1;
                     continue;
                 }
@@ -329,6 +362,28 @@ namespace GloDb
             }
 
             progress.Report($"Finished Patent - {DateTime.Now}");
+        }
+
+        public static List<LandDescriptionCsv> LandDescriptionCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Land_Description Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<LandDescriptionCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Land_Description Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<LandOfficeLookupCsv> LandOfficeLookupCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Land_Office_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<LandOfficeLookupCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Land_Office_Lookup Csv Import - {DateTime.Now}");
+
+            return fileRecords;
         }
     }
 }
