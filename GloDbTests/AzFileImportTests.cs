@@ -258,7 +258,7 @@ namespace GloDbTests
                 accession_nr = "AZA    006727",
                 doc_class_code = "SER",
                 descrip_nr = 1,
-                aliquot_parts = "N�N�",
+                aliquot_parts = "N½N½",
                 section_nr = 8,
                 township_nr = 1,
                 township_dir = "N",
@@ -381,7 +381,7 @@ namespace GloDbTests
         }
 
         [Test]
-        public void I001_AzPatentLookupImport()
+        public void I001_AzPatentImport()
         {
             var imports =
                 GloCsvFileImporter.PatentCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -529,6 +529,104 @@ namespace GloDbTests
                 supreme_court_script_nr = string.Empty,
                 certificate_of_location = string.Empty,
                 coal_entry_nr = string.Empty
+            };
+
+            Assert.AreEqual(lastTestRecord, lastRecord);
+        }
+
+        [Test]
+        public void J001_AzPatenteeImport()
+        {
+            var imports =
+                GloCsvFileImporter.PatenteeCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
+                    "AZ_Patentee.csv"), this);
+
+            Assert.AreEqual(81978, imports.Count);
+
+            var firstRecord = imports.First();
+            var firstTestRecord = new PatenteeCsv
+            {
+                accession_nr = "0137-231",
+                doc_class_code = "TC",
+                patentee_seq_nr = 1,
+                patentee_last_name = "HOLCOMB",
+                patentee_first_name = "JAMES",
+                patentee_middle_name = "P"
+            };
+
+            Assert.AreEqual(firstTestRecord, firstRecord);
+
+            var midRecord = imports[40021];
+            var midTestRecord = new PatenteeCsv
+            {
+                accession_nr = "881526",
+                doc_class_code = "SER",
+                patentee_seq_nr = 3,
+                patentee_last_name = "BALDWIN",
+                patentee_first_name = "CLARENCE",
+                patentee_middle_name = "A"
+            };
+
+            Assert.AreEqual(midTestRecord, midRecord);
+
+            var lastRecord = imports.Last();
+            var lastTestRecord = new PatenteeCsv
+            {
+                accession_nr = "AZPHX 0086517",
+                doc_class_code = "SER",
+                patentee_seq_nr = 1,
+                patentee_last_name = "ARIZONA STATE OF",
+                patentee_first_name = string.Empty,
+                patentee_middle_name = string.Empty
+            };
+
+            Assert.AreEqual(lastTestRecord, lastRecord);
+        }
+
+        [Test]
+        public void J001_AzWarranteeImport()
+        {
+            var imports =
+                GloCsvFileImporter.WarranteeCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
+                    "AZ_Warrantee.csv"), this);
+
+            Assert.AreEqual(37, imports.Count);
+
+            var firstRecord = imports.First();
+            var firstTestRecord = new WarranteeCsv
+            {
+                accession_nr = "0557-120",
+                doc_class_code = "MW",
+                warrantee_seq_nr = 1,
+                warrantee_last_name = "ARARTE",
+                warrantee_first_name = string.Empty,
+                warrantee_middle_name = string.Empty
+            };
+
+            Assert.AreEqual(firstTestRecord, firstRecord);
+
+            var midRecord = imports[16];
+            var midTestRecord = new WarranteeCsv
+            {
+                accession_nr = "0564-467",
+                doc_class_code = "MW",
+                warrantee_seq_nr = 1,
+                warrantee_last_name = "VAN ALSTINE",
+                warrantee_first_name = "NELSON",
+                warrantee_middle_name = string.Empty
+            };
+
+            Assert.AreEqual(midTestRecord, midRecord);
+
+            var lastRecord = imports.Last();
+            var lastTestRecord = new WarranteeCsv
+            {
+                accession_nr = "846372",
+                doc_class_code = "SER",
+                warrantee_seq_nr = 1,
+                warrantee_last_name = "HAWKE",
+                warrantee_first_name = "WILLIAM",
+                warrantee_middle_name = "A"
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);

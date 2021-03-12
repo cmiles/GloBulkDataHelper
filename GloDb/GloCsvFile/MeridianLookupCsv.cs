@@ -4,12 +4,12 @@ namespace GloDb.GloCsvFile
 {
     public record MeridianLookupCsv
     {
-        public int meridian_code { get; set; }
+        public int meridian_code { get; init; }
 
-        public string meridian_name { get; set; }
+        public string meridian_name { get; init; }
 
-        public string state_code { get; set; }
+        public string state_code { get; init; }
 
-        public string state_default { get; set; }
+        public string state_default { get; init; }
     }
 }

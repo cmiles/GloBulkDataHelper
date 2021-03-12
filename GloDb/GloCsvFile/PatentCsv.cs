@@ -6,62 +6,62 @@ namespace GloDb.GloCsvFile
 {
     public record PatentCsv
     {
-        public string accession_nr { get; set; }
+        public string accession_nr { get; init; }
 
-        public int? alt_accession_nr { get; set; }
+        public int? alt_accession_nr { get; init; }
 
-        public string authority_code { get; set; }
+        public string authority_code { get; init; }
 
-        public string blm_serial_nr { get; set; }
+        public string blm_serial_nr { get; init; }
 
-        public bool cancelled_doc { get; set; }
+        public bool cancelled_doc { get; init; }
 
-        public string certificate_of_location { get; set; }
+        public string certificate_of_location { get; init; }
 
-        public string coal_entry_nr { get; set; }
+        public string coal_entry_nr { get; init; }
 
-        public string doc_class_code { get; set; }
+        public string doc_class_code { get; init; }
 
-        public string document_nr { get; set; }
+        public string document_nr { get; init; }
 
-        public string geographic_name { get; set; }
+        public string geographic_name { get; init; }
 
-        public int image_page_nr { get; set; }
+        public int image_page_nr { get; init; }
 
-        public string indian_allotment_nr { get; set; }
+        public string indian_allotment_nr { get; init; }
 
-        public int l_o_code { get; set; }
+        public int l_o_code { get; init; }
 
-        public bool metes_bounds { get; set; }
+        public bool metes_bounds { get; init; }
 
-        public string military_rank { get; set; }
+        public string military_rank { get; init; }
 
-        public string militia { get; set; }
+        public string militia { get; init; }
 
-        public string misc_document_nr { get; set; }
+        public string misc_document_nr { get; init; }
 
-        public string remarks { get; set; }
+        public string remarks { get; init; }
 
-        public DateTime? signature_date { get; set; }
+        public DateTime? signature_date { get; init; }
 
-        public bool signature_present { get; set; }
+        public bool signature_present { get; init; }
 
-        public string state_code { get; set; }
+        public string state_code { get; init; }
 
-        public string state_in_favor_of { get; set; }
+        public string state_in_favor_of { get; init; }
 
-        public bool subsurface_reserved { get; set; }
+        public bool subsurface_reserved { get; init; }
 
-        public string supreme_court_script_nr { get; set; }
+        public string supreme_court_script_nr { get; init; }
 
-        public DateTime? survey_date { get; set; }
+        public DateTime? survey_date { get; init; }
 
-        public decimal total_acres { get; set; }
+        public decimal total_acres { get; init; }
 
-        public string tribe { get; set; }
+        public string tribe { get; init; }
 
-        public bool us_reservations { get; set; }
+        public bool us_reservations { get; init; }
 
-        public bool verify_flag { get; set; }
+        public bool verify_flag { get; init; }
     }
 }

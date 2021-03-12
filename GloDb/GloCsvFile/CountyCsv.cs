@@ -4,14 +4,14 @@ namespace GloDb.GloCsvFile
 {
     public record CountyCsv
     {
-        public string accession_nr { get; set; }
+        public string accession_nr { get; init; }
 
-        public string county_code { get; set; }
+        public string county_code { get; init; }
 
-        public int descrip_nr { get; set; }
+        public int descrip_nr { get; init; }
 
-        public string doc_class_code { get; set; }
+        public string doc_class_code { get; init; }
 
-        public string state_code { get; set; }
+        public string state_code { get; init; }
     }
 }
