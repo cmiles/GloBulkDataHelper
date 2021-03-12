@@ -337,6 +337,203 @@ namespace GloDbTests
             Assert.AreEqual(lastTestRecord, lastRecord);
         }
 
+        [Test]
+        public void H001_AzMeridianLookupImport()
+        {
+            var imports =
+                GloCsvFileImporter.MeridianLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
+                    "AZ_Meridian_Lookup.csv"), this);
+
+            Assert.AreEqual(4, imports.Count);
+
+            var firstRecord = imports.First();
+            var firstTestRecord = new MeridianLookupCsv
+            {
+                state_code = "AZ",
+                meridian_code = 14,
+                meridian_name = "Gila-Salt River",
+                state_default = string.Empty
+            };
+
+            Assert.AreEqual(firstTestRecord, firstRecord);
+
+            var midRecord = imports[1];
+            var midTestRecord = new MeridianLookupCsv
+            {
+                state_code = "AZ",
+                meridian_code = 22,
+                meridian_name = "Navajo",
+                state_default = string.Empty
+            };
+
+            Assert.AreEqual(midTestRecord, midRecord);
+
+            var lastRecord = imports.Last();
+            var lastTestRecord = new MeridianLookupCsv
+            {
+                state_code = "AZ",
+                meridian_code = 99,
+                meridian_name = "No Meridian Available",
+                state_default = string.Empty
+            };
+
+            Assert.AreEqual(lastTestRecord, lastRecord);
+        }
+
+        [Test]
+        public void I001_AzPatentLookupImport()
+        {
+            var imports =
+                GloCsvFileImporter.PatentCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
+                    "AZ_Patent.csv"), this);
+
+            Assert.AreEqual(76961, imports.Count);
+
+            var firstRecord = imports.First();
+            var firstTestRecord = new PatentCsv
+            {
+                accession_nr = "0506-253",
+                doc_class_code = "IA",
+                state_code = "AZ",
+                blm_serial_nr = string.Empty,
+                authority_code = "253000",
+                document_nr = "0",
+                misc_document_nr = string.Empty,
+                indian_allotment_nr = string.Empty,
+                tribe = "PAPAGO OR SAN XAVIER",
+                l_o_code = 2,
+                signature_present = true,
+                signature_date = DateTime.Parse("10/17/1891 12:00:00 AM"),
+                subsurface_reserved = false,
+                metes_bounds = false,
+                survey_date = null,
+                us_reservations = false,
+                cancelled_doc = false,
+                geographic_name = string.Empty,
+                total_acres = 256,
+                remarks = string.Empty,
+                verify_flag = true,
+                image_page_nr = 1,
+                military_rank = string.Empty,
+                militia = string.Empty,
+                alt_accession_nr = null,
+                state_in_favor_of = string.Empty,
+                supreme_court_script_nr = string.Empty,
+                certificate_of_location = string.Empty,
+                coal_entry_nr = string.Empty
+            };
+
+            Assert.AreEqual(firstTestRecord, firstRecord);
+
+            var midRecord = imports[29515];
+            var midTestRecord = new PatentCsv
+            {
+                accession_nr = "02-91-0001",
+                doc_class_code = "SER",
+                state_code = "AZ",
+                blm_serial_nr = "A-23240",
+                authority_code = "255000",
+                document_nr = "0",
+                misc_document_nr = string.Empty,
+                indian_allotment_nr = string.Empty,
+                tribe = string.Empty,
+                l_o_code = 8,
+                signature_present = true,
+                signature_date = DateTime.Parse("10/18/1990 0:00"),
+                subsurface_reserved = false,
+                metes_bounds = false,
+                survey_date = null,
+                us_reservations = true,
+                cancelled_doc = false,
+                geographic_name = "LAURA MAE #1, #2, #3 AND #4",
+                total_acres = 71.7920M,
+                remarks = "HARBORLITE MILLSITE #1A AND #2A",
+                verify_flag = true,
+                image_page_nr = 3,
+                military_rank = string.Empty,
+                militia = string.Empty,
+                alt_accession_nr = null,
+                state_in_favor_of = string.Empty,
+                supreme_court_script_nr = string.Empty,
+                certificate_of_location = string.Empty,
+                coal_entry_nr = string.Empty
+            };
+
+            Assert.AreEqual(midTestRecord, midRecord);
+
+            var midRecordTwo = imports[29877];
+            var midTestRecordTwo = new PatentCsv
+            {
+                accession_nr = "0557-120",
+                doc_class_code = "MW",
+                state_code = "AZ",
+                blm_serial_nr = string.Empty,
+                authority_code = "261006",
+                document_nr = "89393",
+                misc_document_nr = string.Empty,
+                indian_allotment_nr = string.Empty,
+                tribe = string.Empty,
+                l_o_code = 9,
+                signature_present = true,
+                signature_date = DateTime.Parse("12/24/1903  12:00:00 AM"),
+                subsurface_reserved = false,
+                metes_bounds = false,
+                survey_date = null,
+                us_reservations = true,
+                cancelled_doc = false,
+                geographic_name = string.Empty,
+                total_acres = 120,
+                remarks = string.Empty,
+                verify_flag = true,
+                image_page_nr = 1,
+                military_rank = "WARRIOR",
+                militia = "CAPTAIN SPOAKOKEE MICCOS COMPANY CREEK VOLUNTEERS",
+                alt_accession_nr = null,
+                state_in_favor_of = string.Empty,
+                supreme_court_script_nr = string.Empty,
+                certificate_of_location = string.Empty,
+                coal_entry_nr = string.Empty
+            };
+
+            Assert.AreEqual(midTestRecordTwo, midRecordTwo);
+
+            var lastRecord = imports.Last();
+            var lastTestRecord = new PatentCsv
+            {
+                accession_nr = "AZPHX 0086517",
+                doc_class_code = "SER",
+                state_code = "AZ",
+                blm_serial_nr = "AZPHX 0086517",
+                authority_code = "262200",
+                document_nr = string.Empty,
+                misc_document_nr = string.Empty,
+                indian_allotment_nr = string.Empty,
+                tribe = string.Empty,
+                l_o_code = 8,
+                signature_present = true,
+                signature_date = DateTime.Parse("10/5/1951  12:00:00 AM"),
+                subsurface_reserved = false,
+                metes_bounds = false,
+                survey_date = null,
+                us_reservations = true,
+                cancelled_doc = false,
+                geographic_name = string.Empty,
+                total_acres = 40,
+                remarks = string.Empty,
+                verify_flag = false,
+                image_page_nr = 0,
+                military_rank = string.Empty,
+                militia = string.Empty,
+                alt_accession_nr = null,
+                state_in_favor_of = string.Empty,
+                supreme_court_script_nr = string.Empty,
+                certificate_of_location = string.Empty,
+                coal_entry_nr = string.Empty
+            };
+
+            Assert.AreEqual(lastTestRecord, lastRecord);
+        }
+
         [SetUp]
         public void Setup()
         {

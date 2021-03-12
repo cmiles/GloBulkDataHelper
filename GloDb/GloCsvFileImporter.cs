@@ -77,10 +77,10 @@ namespace GloDb
 
             bool YesNoBoolConversion(string toParse)
             {
-                var trueList = new List<string> {"yes", "true"};
+                var trueList = new List<string> {"yes", "true", "y"};
 
                 foreach (var loopTrueList in trueList)
-                    if (toParse.IndexOf(loopTrueList, StringComparison.InvariantCultureIgnoreCase) > 0)
+                    if (toParse.IndexOf(loopTrueList, StringComparison.InvariantCultureIgnoreCase) >= 0)
                         return true;
 
                 return false;
@@ -170,6 +170,11 @@ namespace GloDb
                     if (loopProperties.property.PropertyType == typeof(int?))
                         loopProperties.property.SetValue(newObject,
                             relatedValue == null ? null : int.Parse(valueList[loopProperties.Item1]));
+                    if (loopProperties.property.PropertyType == typeof(DateTime))
+                        loopProperties.property.SetValue(newObject, DateTime.Parse(valueList[loopProperties.Item1]));
+                    if (loopProperties.property.PropertyType == typeof(DateTime?))
+                        loopProperties.property.SetValue(newObject,
+                            relatedValue == null ? null : DateTime.Parse(valueList[loopProperties.Item1]));
                     if (loopProperties.property.PropertyType == typeof(decimal))
                         loopProperties.property.SetValue(newObject,
                             decimal.Parse(valueList[loopProperties.columnNumber]));
@@ -382,6 +387,50 @@ namespace GloDb
             var fileRecords = FileRecords<LandOfficeLookupCsv>(fileName, progress).ToList();
 
             progress.Report($"Finished Land_Office_Lookup Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<MeridianLookupCsv> MeridianLookupCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Meridian_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<MeridianLookupCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Meridian_Lookup Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<PatentCsv> PatentCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Patent Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<PatentCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Patent Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<PatenteeCsv> PatenteeCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Patentee Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<PatenteeCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Patentee Csv Import - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static List<WarranteeCsv> WarranteeCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Warrantee Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<WarranteeCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Warrantee Csv Import - {DateTime.Now}");
 
             return fileRecords;
         }
