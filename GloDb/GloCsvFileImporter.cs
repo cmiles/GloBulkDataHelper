@@ -12,6 +12,18 @@ namespace GloDb
 {
     public static class GloCsvFileImporter
     {
+        public static AuthorityLookup AuthorityLookupCsvToDbRecord(AuthorityLookupCsv toTransform, string stateDataFileCode)
+        {
+            return new AuthorityLookup
+            {
+                ActTreaty = toTransform.act_treaty,
+                AuthorityCode = toTransform.authority_code,
+                EntryClass = toTransform.entry_class,
+                StateDataFile = stateDataFileCode,
+                StatutoryReference = toTransform.statutory_ref
+            };
+        }
+
         public static List<AuthorityLookupCsv> AuthorityLookupCsvRecords(string fileName, IProgress<string> progress)
         {
             progress.Report($"Starting Authority_Lookup Csv Import - {DateTime.Now}");
@@ -21,6 +33,19 @@ namespace GloDb
             progress.Report($"Finished Authority_Lookup Csv Import - {DateTime.Now}");
 
             return fileRecords;
+        }
+
+        public static County CountyCsvToDbRecord(CountyCsv toTransform, string stateDataFileCode)
+        {
+            return new County()
+            {
+                AccessionNumber = toTransform.accession_nr,
+                CountyCode = toTransform.county_code,
+                DescriptionNumber = toTransform.descrip_nr,
+                DocClassCode = toTransform.doc_class_code,
+                StateCode = toTransform.state_code,
+                StateDataFile = stateDataFileCode
+            };
         }
 
         public static List<CountyCsv> CountyCsvRecords(string fileName, IProgress<string> progress)
@@ -34,6 +59,17 @@ namespace GloDb
             return fileRecords;
         }
 
+        public static CountyLookup CountyLookupCsvToDbRecord(CountyLookupCsv toTransform, string stateDataFileCode)
+        {
+            return new CountyLookup()
+            {
+                CountyCode = toTransform.county_code,
+                CountyName = toTransform.county_name,
+                StateCode = toTransform.state_code,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
         public static List<CountyLookupCsv> CountyLookupCsvRecords(string fileName, IProgress<string> progress)
         {
             progress.Report($"Starting County_Lookup Csv Import - {DateTime.Now}");
@@ -43,6 +79,17 @@ namespace GloDb
             progress.Report($"Finished County_Lookup Csv Import - {DateTime.Now}");
 
             return fileRecords;
+        }
+
+        public static DocumentClassLookup DocumentClassLookupCsvToDbRecord(DocumentClassLookupCsv toTransform, string stateDataFileCode)
+        {
+            return new DocumentClassLookup()
+            {
+                DocumentClassCode = toTransform.doc_class_code,
+                DocumentClassDescription = toTransform.document_class_description,
+                DocumentClassDisplayName = toTransform.doc_class_display_name,
+                StateDataFile = stateDataFileCode
+            };
         }
 
         public static List<DocumentClassLookupCsv> DocClassLookupCsvRecords(string fileName, IProgress<string> progress)
@@ -369,6 +416,29 @@ namespace GloDb
             progress.Report($"Finished Patent - {DateTime.Now}");
         }
 
+        public static LandDescription LandDescriptionCsvToDbRecord(LandDescriptionCsv toTransform, string stateDataFileCode)
+        {
+            return new LandDescription()
+            {
+                AccessionNumber = toTransform.accession_nr,
+                AliquotParts = toTransform.aliquot_parts,
+                BlockNumber = toTransform.block_nr,
+                DescriptionNumber = toTransform.descrip_nr,
+                DocumentClassCode = toTransform.doc_class_code,
+                FractionalSection = toTransform.fractional_section,
+                LdRemarks = toTransform.ld_remarks,
+                MeridianCode = toTransform.meridian_code,
+                RangeDir = toTransform.range_dir,
+                RangeNumber = toTransform.range_nr,
+                SectionNumber = toTransform.section_nr,
+                StateCode = toTransform.state_code,
+                SurveyNumber = toTransform.survey_nr,
+                TownshipDir = toTransform.township_dir,
+                TownshipNumber = toTransform.township_nr,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
         public static List<LandDescriptionCsv> LandDescriptionCsvRecords(string fileName, IProgress<string> progress)
         {
             progress.Report($"Starting Land_Description Csv Import - {DateTime.Now}");
@@ -380,6 +450,17 @@ namespace GloDb
             return fileRecords;
         }
 
+        public static LandOfficeLookup DocumentClassLookupCsvToDbRecord(LandOfficeLookupCsv toTransform, string stateDataFileCode)
+        {
+            return new LandOfficeLookup()
+            {
+                LandOfficeCode = toTransform.l_o_code,
+                LandOfficeDescription = toTransform.l_o_description,
+                StateCode = toTransform.state_code,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
         public static List<LandOfficeLookupCsv> LandOfficeLookupCsvRecords(string fileName, IProgress<string> progress)
         {
             progress.Report($"Starting Land_Office_Lookup Csv Import - {DateTime.Now}");
@@ -389,6 +470,18 @@ namespace GloDb
             progress.Report($"Finished Land_Office_Lookup Csv Import - {DateTime.Now}");
 
             return fileRecords;
+        }
+        
+        public static MeridianLookup MeridianLookupCsvToDbRecord(MeridianLookupCsv toTransform, string stateDataFileCode)
+        {
+            return new MeridianLookup()
+            {
+                MeridianCode = toTransform.meridian_code,
+                MeridianName = toTransform.meridian_name,
+                StateCode = toTransform.state_code,
+                StateDefault = toTransform.state_default,
+                StateDataFile = stateDataFileCode
+            };
         }
 
         public static List<MeridianLookupCsv> MeridianLookupCsvRecords(string fileName, IProgress<string> progress)
@@ -402,6 +495,43 @@ namespace GloDb
             return fileRecords;
         }
 
+        public static Patent PatentCsvToDbRecord(PatentCsv toTransform, string stateDataFileCode)
+        {
+            return new Patent()
+            {
+                AccessionNumber = toTransform.accession_nr,
+                AltAccessionNumber = toTransform.alt_accession_nr,
+                AuthorityCode = toTransform.authority_code,
+                BlmSerialNumber = toTransform.blm_serial_nr,
+                CancelledDocument = toTransform.cancelled_doc,
+                CertificateOfLocation = toTransform.certificate_of_location,
+                CoalEntryNumber = toTransform.coal_entry_nr,
+                DocumentClassCode = toTransform.doc_class_code,
+                DocumentNumber = toTransform.document_nr,
+                GeographicName = toTransform.geographic_name,
+                ImagePageNumber = toTransform.image_page_nr,
+                IndianAllotmentNumber = toTransform.indian_allotment_nr,
+                LOCode = toTransform.l_o_code,
+                MetesBounds = toTransform.metes_bounds,
+                MilitaryRank = toTransform.military_rank,
+                Militia = toTransform.militia,
+                MiscellaneousDocumentNumber = toTransform.misc_document_nr,
+                Remarks = toTransform.remarks,
+                SignatureDate = toTransform.signature_date,
+                SignaturePresent = toTransform.signature_present,
+                StateCode = toTransform.state_code,
+                StateInFavorOf = toTransform.state_in_favor_of,
+                SubsurfaceReserved = toTransform.subsurface_reserved,
+                SupremeCourtScriptNumber = toTransform.supreme_court_script_nr,
+                SurveyDate = toTransform.survey_date,
+                TotalAcres = toTransform.total_acres,
+                Tribe = toTransform.tribe,
+                UsReservations = toTransform.us_reservations,
+                VerifyFlag = toTransform.verify_flag,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
         public static List<PatentCsv> PatentCsvRecords(string fileName, IProgress<string> progress)
         {
             progress.Report($"Starting Patent Csv Import - {DateTime.Now}");
@@ -413,6 +543,20 @@ namespace GloDb
             return fileRecords;
         }
 
+        public static Patentee PatenteeCsvToDbRecord(PatenteeCsv toTransform, string stateDataFileCode)
+        {
+            return new Patentee()
+            {
+                AccessionNumber = toTransform.accession_nr,
+                DocumentClassCode = toTransform.doc_class_code,
+                PatenteeFirstName = toTransform.patentee_first_name,
+                PatenteeLastName = toTransform.patentee_last_name,
+                PatenteeMiddleName = toTransform.patentee_middle_name,
+                PatenteeSequenceNumber = toTransform.patentee_seq_nr,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
         public static List<PatenteeCsv> PatenteeCsvRecords(string fileName, IProgress<string> progress)
         {
             progress.Report($"Starting Patentee Csv Import - {DateTime.Now}");
@@ -422,6 +566,20 @@ namespace GloDb
             progress.Report($"Finished Patentee Csv Import - {DateTime.Now}");
 
             return fileRecords;
+        }
+
+        public static Warrantee WarranteeCsvToDbRecord(WarranteeCsv toTransform, string stateDataFileCode)
+        {
+            return new Warrantee()
+            {
+                AccessionNumber = toTransform.accession_nr,
+                DocumentClassCode = toTransform.doc_class_code,
+                WarranteeFirstName = toTransform.warrantee_first_name,
+                WarranteeLastName = toTransform.warrantee_last_name,
+                WarranteeMiddleName = toTransform.warrantee_middle_name,
+                WarranteeSequenceNumber = toTransform.warrantee_seq_nr,
+                StateDataFile = stateDataFileCode
+            };
         }
 
         public static List<WarranteeCsv> WarranteeCsvRecords(string fileName, IProgress<string> progress)
