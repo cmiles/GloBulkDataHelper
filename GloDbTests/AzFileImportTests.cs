@@ -1,8 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using GloDb;
 using GloDb.GloCsvFile;
+using GloDb.GloData;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Serilog;
 
@@ -13,6 +17,8 @@ namespace GloDbTests
         public string DbFileName { get; set; }
         public string TestDirectory { get; set; }
         public string TestFileDirectory { get; set; }
+
+        public const string StateDataFileValue = "AZ Test File";
 
         public void Report(string value)
         {
@@ -26,7 +32,7 @@ namespace GloDbTests
         }
 
         [Test]
-        public void B001_AuthorityFileCsvRecordsImport()
+        public async Task B001_AuthorityFileCsvRecordsImport()
         {
             var imports =
                 GloCsvFileImporter.AuthorityLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -66,6 +72,46 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.AuthorityLookupToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = await context.AuthorityLookups.SingleAsync(x => x.AuthorityCode == "000000");
+            var firstDbTestRecord = new AuthorityLookup
+            {
+                AuthorityCode = "000000",
+                StatutoryReference = string.Empty,
+                ActTreaty = "NA",
+                EntryClass = "Public Land (no Action)",
+                StateDataFile = StateDataFileValue
+            };
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = await context.AuthorityLookups.SingleAsync(x => x.AuthorityCode == "278501");
+            var midDbTestRecord = new AuthorityLookup
+            {
+                AuthorityCode = "278501",
+                StatutoryReference = "82 Stat. 870",
+                ActTreaty = "September 26, 1968",
+                EntryClass = "Sale-Pls Unintentional",
+                StateDataFile = StateDataFileValue
+            };
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = await context.AuthorityLookups.SingleAsync(x => x.AuthorityCode == "999999");
+            var lastDbTestRecord = new AuthorityLookup
+            {
+                AuthorityCode = "999999",
+                StatutoryReference = string.Empty,
+                ActTreaty = "January 1, 1999",
+                EntryClass = "No Authority Available",
+                StateDataFile = StateDataFileValue
+            };
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
@@ -158,7 +204,7 @@ namespace GloDbTests
         public void E001_DocClassLookupFileCsvRecordsImport()
         {
             var imports =
-                GloCsvFileImporter.DocClassLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
+                GloCsvFileImporter.DocumentClassLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
                     "AZ_Doc_Class_Lookup.csv"), this);
 
             Assert.AreEqual(20, imports.Count);
@@ -295,6 +341,8 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+
         }
 
         [Test]

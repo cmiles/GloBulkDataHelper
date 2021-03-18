@@ -6,15 +6,27 @@ using System.Reflection;
 using System.Threading.Tasks;
 using GloDb.GloCsvFile;
 using GloDb.GloData;
-using Omu.ValueInjecter;
 
 namespace GloDb
 {
     public static class GloCsvFileImporter
     {
-        public static AuthorityLookup AuthorityLookupCsvToDbRecord(AuthorityLookupCsv toTransform, string stateDataFileCode)
+        public static List<AuthorityLookupCsv> AuthorityLookupCsvRecords(string fileName, IProgress<string> progress)
         {
-            return new AuthorityLookup
+            progress.Report($"Starting Authority_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<AuthorityLookupCsv>(fileName, progress).ToList();
+
+            progress.Report(
+                $"Finished Authority_Lookup Csv Import - {fileRecords.Count} records found - {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static AuthorityLookup AuthorityLookupCsvToDbRecord(AuthorityLookupCsv toTransform,
+            string stateDataFileCode)
+        {
+            return new()
             {
                 ActTreaty = toTransform.act_treaty,
                 AuthorityCode = toTransform.authority_code,
@@ -24,28 +36,25 @@ namespace GloDb
             };
         }
 
-        public static List<AuthorityLookupCsv> AuthorityLookupCsvRecords(string fileName, IProgress<string> progress)
+        public static async Task AuthorityLookupToDb(List<AuthorityLookupCsv> toImport, string stateDataFileCode,
+            string dbName, IProgress<string> progress)
         {
-            progress.Report($"Starting Authority_Lookup Csv Import - {DateTime.Now}");
+            var importBatches = toImport.Select(x => AuthorityLookupCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
 
-            var fileRecords = FileRecords<AuthorityLookupCsv>(fileName, progress).ToList();
+            var batchCounter = 1;
 
-            progress.Report($"Finished Authority_Lookup Csv Import - {DateTime.Now}");
-
-            return fileRecords;
-        }
-
-        public static County CountyCsvToDbRecord(CountyCsv toTransform, string stateDataFileCode)
-        {
-            return new County()
+            foreach (var importBatch in importBatches)
             {
-                AccessionNumber = toTransform.accession_nr,
-                CountyCode = toTransform.county_code,
-                DescriptionNumber = toTransform.descrip_nr,
-                DocClassCode = toTransform.doc_class_code,
-                StateCode = toTransform.state_code,
-                StateDataFile = stateDataFileCode
-            };
+                progress.Report(
+                    $"Authority Lookup DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.AuthorityLookups.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
         }
 
         public static List<CountyCsv> CountyCsvRecords(string fileName, IProgress<string> progress)
@@ -54,17 +63,19 @@ namespace GloDb
 
             var fileRecords = FileRecords<CountyCsv>(fileName, progress).ToList();
 
-            progress.Report($"Finished County Csv Import - {DateTime.Now}");
+            progress.Report($"Finished County Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
             return fileRecords;
         }
 
-        public static CountyLookup CountyLookupCsvToDbRecord(CountyLookupCsv toTransform, string stateDataFileCode)
+        public static County CountyCsvToDbRecord(CountyCsv toTransform, string stateDataFileCode)
         {
-            return new CountyLookup()
+            return new()
             {
+                AccessionNumber = toTransform.accession_nr,
                 CountyCode = toTransform.county_code,
-                CountyName = toTransform.county_name,
+                DescriptionNumber = toTransform.descrip_nr,
+                DocClassCode = toTransform.doc_class_code,
                 StateCode = toTransform.state_code,
                 StateDataFile = stateDataFileCode
             };
@@ -76,14 +87,79 @@ namespace GloDb
 
             var fileRecords = FileRecords<CountyLookupCsv>(fileName, progress).ToList();
 
-            progress.Report($"Finished County_Lookup Csv Import - {DateTime.Now}");
+            progress.Report($"Finished County_Lookup Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
             return fileRecords;
         }
 
-        public static DocumentClassLookup DocumentClassLookupCsvToDbRecord(DocumentClassLookupCsv toTransform, string stateDataFileCode)
+        public static CountyLookup CountyLookupCsvToDbRecord(CountyLookupCsv toTransform, string stateDataFileCode)
         {
-            return new DocumentClassLookup()
+            return new()
+            {
+                CountyCode = toTransform.county_code,
+                CountyName = toTransform.county_name,
+                StateCode = toTransform.state_code,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
+        public static async Task CountyLookupToDb(List<CountyLookupCsv> toImport, string stateDataFileCode,
+            string dbName, IProgress<string> progress)
+        {
+            var importBatches = toImport.Select(x => CountyLookupCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
+
+            var batchCounter = 1;
+
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report($"County Lookup DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.CountyLookups.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
+        }
+
+        public static async Task CountyToDb(List<CountyCsv> toImport, string stateDataFileCode, string dbName,
+            IProgress<string> progress)
+        {
+            var importBatches = toImport.Select(x => CountyCsvToDbRecord(x, stateDataFileCode)).ToList().Partition(2500)
+                .ToList();
+
+            var batchCounter = 1;
+
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report($"County DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.Counties.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
+        }
+
+        public static List<DocumentClassLookupCsv> DocumentClassLookupCsvRecords(string fileName,
+            IProgress<string> progress)
+        {
+            progress.Report($"Starting Doc_Class_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<DocumentClassLookupCsv>(fileName, progress).ToList();
+
+            progress.Report(
+                $"Finished Doc_Class_Lookup Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static DocumentClassLookup DocumentClassLookupCsvToDbRecord(DocumentClassLookupCsv toTransform,
+            string stateDataFileCode)
+        {
+            return new()
             {
                 DocumentClassCode = toTransform.doc_class_code,
                 DocumentClassDescription = toTransform.document_class_description,
@@ -92,15 +168,25 @@ namespace GloDb
             };
         }
 
-        public static List<DocumentClassLookupCsv> DocClassLookupCsvRecords(string fileName, IProgress<string> progress)
+        public static async Task DocumentClassLookupToDb(List<DocumentClassLookupCsv> toImport,
+            string stateDataFileCode, string dbName, IProgress<string> progress)
         {
-            progress.Report($"Starting Doc_Class_Lookup Csv Import - {DateTime.Now}");
+            var importBatches = toImport.Select(x => DocumentClassLookupCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
 
-            var fileRecords = FileRecords<DocumentClassLookupCsv>(fileName, progress).ToList();
+            var batchCounter = 1;
 
-            progress.Report($"Finished Doc_Class_Lookup Csv Import - {DateTime.Now}");
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report(
+                    $"Document Class Lookup DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
 
-            return fileRecords;
+                var context = new GloDataContext(dbName);
+
+                context.DocumentClassLookups.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
         }
 
         private static IEnumerable<List<T>> FileRecordBatches<T>(string fileName, IProgress<string> progress)
@@ -248,177 +334,22 @@ namespace GloDb
             return FileRecordBatches<T>(fileName, progress).ToList().SelectMany(x => x).ToList();
         }
 
-        public static async Task Import(string dbName, IProgress<string> progress, DirectoryInfo folder,
-            string stateCodeFilter)
+        public static List<LandDescriptionCsv> LandDescriptionCsvRecords(string fileName, IProgress<string> progress)
         {
-            List<FileInfo> FileMatches(string primaryFileFilter)
-            {
-                var initialFiles = folder.EnumerateFiles().Where(x =>
-                    x.Name.IndexOf(primaryFileFilter, StringComparison.InvariantCultureIgnoreCase) >= 0);
-                return string.IsNullOrWhiteSpace(stateCodeFilter)
-                    ? initialFiles.ToList()
-                    : initialFiles.Where(x =>
-                        x.Name.IndexOf(stateCodeFilter, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
-            }
+            progress.Report($"Starting Land_Description Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<LandDescriptionCsv>(fileName, progress).ToList();
 
             progress.Report(
-                $"Found {FileMatches(stateCodeFilter).Count} Files {(string.IsNullOrWhiteSpace(stateCodeFilter) ? string.Empty : $" - filtering for '{stateCodeFilter}'")}");
+                $"Finished Land_Description Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
-            var context = new GloDataContext(dbName);
-            context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            var authorityFiles = FileMatches("Authority_Lookup.csv");
-
-            var authorityRecords = new List<AuthorityLookupCsv>();
-
-            authorityFiles.ForEach(x =>
-                authorityRecords.AddRange(FileRecords<AuthorityLookupCsv>(x.FullName, progress)));
-
-            context.AuthorityLookups.AddRange(authorityRecords.Select(x => new AuthorityLookup().InjectFrom(x))
-                .Cast<AuthorityLookup>());
-
-            await context.SaveChangesAsync(true);
-
-            progress.Report($"Finished Authority_Lookup - {DateTime.Now}");
-
-            context = new GloDataContext(dbName);
-            context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            var countyLookupFiles = FileMatches("County_Lookup.csv");
-
-            var countyLookupRecords = new List<CountyLookupCsv>();
-
-            countyLookupFiles.ForEach(x =>
-                countyLookupRecords.AddRange(FileRecords<CountyLookupCsv>(x.FullName, progress)));
-
-            context.CountyLookups.AddRange(countyLookupRecords.Select(x => new CountyLookup().InjectFrom(x))
-                .Cast<CountyLookup>());
-
-            await context.SaveChangesAsync(true);
-
-            progress.Report($"Finished County_Lookup - {DateTime.Now}");
-
-            context = new GloDataContext(dbName);
-            context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            var docClassLookupFiles = FileMatches("Doc_Class_Lookup.csv");
-
-            var docClassLookupRecords = new List<DocumentClassLookupCsv>();
-
-            docClassLookupFiles.ForEach(x =>
-                docClassLookupRecords.AddRange(FileRecords<DocumentClassLookupCsv>(x.FullName, progress)));
-
-            context.DocClassLookups.AddRange(docClassLookupRecords.Select(x => new DocumentClassLookup().InjectFrom(x))
-                .Cast<DocumentClassLookup>());
-
-            await context.SaveChangesAsync(true);
-
-            progress.Report($"Finished Doc_Class - {DateTime.Now}");
-
-            context = new GloDataContext(dbName);
-            context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            var meridianLookupFiles = FileMatches("Meridian_Lookup.csv");
-
-            var meridianLookupRecords = new List<MeridianLookupCsv>();
-
-            meridianLookupFiles.ForEach(x =>
-                meridianLookupRecords.AddRange(FileRecords<MeridianLookupCsv>(x.FullName, progress)));
-
-            context.MeridianLookups.AddRange(meridianLookupRecords.Select(x => new MeridianLookup().InjectFrom(x))
-                .Cast<MeridianLookup>());
-
-            await context.SaveChangesAsync(true);
-
-            progress.Report($"Finished Meridian_Lookup - {DateTime.Now}");
-
-            var landDescriptionFiles = FileMatches("Land_Description.csv");
-
-            foreach (var loopLandDescriptionFiles in landDescriptionFiles)
-            foreach (var fileRecordBatch in FileRecordBatches<LandDescriptionCsv>(
-                loopLandDescriptionFiles.FullName, progress))
-            {
-                context = new GloDataContext(dbName);
-                context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-                context.LandDescriptions.AddRange(fileRecordBatch.Select(x => new LandDescription().InjectFrom(x))
-                    .Cast<LandDescription>());
-
-                await context.SaveChangesAsync(true);
-            }
-
-            progress.Report($"Finished Land_Description - {DateTime.Now}");
-
-            var patenteeFiles = FileMatches("Patentee.csv");
-
-            foreach (var loopPatenteeFiles in patenteeFiles)
-            foreach (var fileRecordBatch in FileRecordBatches<PatenteeCsv>(
-                loopPatenteeFiles.FullName, progress))
-            {
-                context = new GloDataContext(dbName);
-                context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-                context.Patentees.AddRange(fileRecordBatch.Select(x => new Patentee().InjectFrom(x))
-                    .Cast<Patentee>());
-
-                await context.SaveChangesAsync(true);
-            }
-
-            progress.Report($"Finished Patentee - {DateTime.Now}");
-
-            context = new GloDataContext(dbName);
-            context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            var warranteeFiles = FileMatches("Warrantee.csv");
-
-            var warranteeRecords = new List<WarranteeCsv>();
-
-            warranteeFiles.ForEach(x => warranteeRecords.AddRange(FileRecords<WarranteeCsv>(x.FullName, progress)));
-
-            context.Warrantees.AddRange(warranteeRecords.Select(x => new Warrantee().InjectFrom(x)).Cast<Warrantee>());
-
-            await context.SaveChangesAsync(true);
-
-            progress.Report($"Finished Warrantee - {DateTime.Now}");
-
-            context = new GloDataContext(dbName);
-            context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-            var landOfficeLookupFiles = FileMatches("Land_Office_Lookup.csv");
-
-            var landOfficeLookupRecords = new List<LandOfficeLookupCsv>();
-
-            landOfficeLookupFiles.ForEach(x =>
-                landOfficeLookupRecords.AddRange(FileRecords<LandOfficeLookupCsv>(x.FullName, progress)));
-
-            context.LandOfficeLookups.AddRange(landOfficeLookupRecords
-                .Select(x => new LandOfficeLookup().InjectFrom(x)).Cast<LandOfficeLookup>());
-
-            await context.SaveChangesAsync(true);
-
-            progress.Report($"Finished Land_Office_Lookup - {DateTime.Now}");
-
-            var patentFiles = FileMatches("Patent.csv");
-
-            foreach (var loopPatentFiles in patentFiles)
-            foreach (var fileRecordBatch in FileRecordBatches<PatentCsv>(
-                loopPatentFiles.FullName, progress))
-            {
-                context = new GloDataContext(dbName);
-                context.ChangeTracker.AutoDetectChangesEnabled = false;
-
-                context.Patents.AddRange(fileRecordBatch.Select(x => new Patent().InjectFrom(x))
-                    .Cast<Patent>());
-
-                await context.SaveChangesAsync(true);
-            }
-
-            progress.Report($"Finished Patent - {DateTime.Now}");
+            return fileRecords;
         }
 
-        public static LandDescription LandDescriptionCsvToDbRecord(LandDescriptionCsv toTransform, string stateDataFileCode)
+        public static LandDescription LandDescriptionCsvToDbRecord(LandDescriptionCsv toTransform,
+            string stateDataFileCode)
         {
-            return new LandDescription()
+            return new()
             {
                 AccessionNumber = toTransform.accession_nr,
                 AliquotParts = toTransform.aliquot_parts,
@@ -439,26 +370,25 @@ namespace GloDb
             };
         }
 
-        public static List<LandDescriptionCsv> LandDescriptionCsvRecords(string fileName, IProgress<string> progress)
+        public static async Task LandDescriptionToDb(List<LandDescriptionCsv> toImport, string stateDataFileCode,
+            string dbName, IProgress<string> progress)
         {
-            progress.Report($"Starting Land_Description Csv Import - {DateTime.Now}");
+            var importBatches = toImport.Select(x => LandDescriptionCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
 
-            var fileRecords = FileRecords<LandDescriptionCsv>(fileName, progress).ToList();
+            var batchCounter = 1;
 
-            progress.Report($"Finished Land_Description Csv Import - {DateTime.Now}");
-
-            return fileRecords;
-        }
-
-        public static LandOfficeLookup DocumentClassLookupCsvToDbRecord(LandOfficeLookupCsv toTransform, string stateDataFileCode)
-        {
-            return new LandOfficeLookup()
+            foreach (var importBatch in importBatches)
             {
-                LandOfficeCode = toTransform.l_o_code,
-                LandOfficeDescription = toTransform.l_o_description,
-                StateCode = toTransform.state_code,
-                StateDataFile = stateDataFileCode
-            };
+                progress.Report(
+                    $"Land Description DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.LandDescriptions.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
         }
 
         public static List<LandOfficeLookupCsv> LandOfficeLookupCsvRecords(string fileName, IProgress<string> progress)
@@ -467,14 +397,61 @@ namespace GloDb
 
             var fileRecords = FileRecords<LandOfficeLookupCsv>(fileName, progress).ToList();
 
-            progress.Report($"Finished Land_Office_Lookup Csv Import - {DateTime.Now}");
+            progress.Report(
+                $"Finished Land_Office_Lookup Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
             return fileRecords;
         }
-        
-        public static MeridianLookup MeridianLookupCsvToDbRecord(MeridianLookupCsv toTransform, string stateDataFileCode)
+
+        public static LandOfficeLookup LandOfficeLookupCsvToDbRecord(LandOfficeLookupCsv toTransform,
+            string stateDataFileCode)
         {
-            return new MeridianLookup()
+            return new()
+            {
+                LandOfficeCode = toTransform.l_o_code,
+                LandOfficeDescription = toTransform.l_o_description,
+                StateCode = toTransform.state_code,
+                StateDataFile = stateDataFileCode
+            };
+        }
+
+        public static async Task LandOfficeLookupToDb(List<LandOfficeLookupCsv> toImport, string stateDataFileCode,
+            string dbName, IProgress<string> progress)
+        {
+            var importBatches = toImport.Select(x => LandOfficeLookupCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
+
+            var batchCounter = 1;
+
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report(
+                    $"Land Office Lookup DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.LandOfficeLookups.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
+        }
+
+        public static List<MeridianLookupCsv> MeridianLookupCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Meridian_Lookup Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<MeridianLookupCsv>(fileName, progress).ToList();
+
+            progress.Report(
+                $"Finished Meridian_Lookup Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
+
+            return fileRecords;
+        }
+
+        public static MeridianLookup MeridianLookupCsvToDbRecord(MeridianLookupCsv toTransform,
+            string stateDataFileCode)
+        {
+            return new()
             {
                 MeridianCode = toTransform.meridian_code,
                 MeridianName = toTransform.meridian_name,
@@ -484,20 +461,41 @@ namespace GloDb
             };
         }
 
-        public static List<MeridianLookupCsv> MeridianLookupCsvRecords(string fileName, IProgress<string> progress)
+        public static async Task MeridianLookupToDb(List<MeridianLookupCsv> toImport, string stateDataFileCode,
+            string dbName, IProgress<string> progress)
         {
-            progress.Report($"Starting Meridian_Lookup Csv Import - {DateTime.Now}");
+            var importBatches = toImport.Select(x => MeridianLookupCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
 
-            var fileRecords = FileRecords<MeridianLookupCsv>(fileName, progress).ToList();
+            var batchCounter = 1;
 
-            progress.Report($"Finished Meridian_Lookup Csv Import - {DateTime.Now}");
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report(
+                    $"Meridian Lookup DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.MeridianLookups.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
+        }
+
+        public static List<PatentCsv> PatentCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Patent Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<PatentCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Patent Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
             return fileRecords;
         }
 
         public static Patent PatentCsvToDbRecord(PatentCsv toTransform, string stateDataFileCode)
         {
-            return new Patent()
+            return new()
             {
                 AccessionNumber = toTransform.accession_nr,
                 AltAccessionNumber = toTransform.alt_accession_nr,
@@ -532,20 +530,20 @@ namespace GloDb
             };
         }
 
-        public static List<PatentCsv> PatentCsvRecords(string fileName, IProgress<string> progress)
+        public static List<PatenteeCsv> PatenteeCsvRecords(string fileName, IProgress<string> progress)
         {
-            progress.Report($"Starting Patent Csv Import - {DateTime.Now}");
+            progress.Report($"Starting Patentee Csv Import - {DateTime.Now}");
 
-            var fileRecords = FileRecords<PatentCsv>(fileName, progress).ToList();
+            var fileRecords = FileRecords<PatenteeCsv>(fileName, progress).ToList();
 
-            progress.Report($"Finished Patent Csv Import - {DateTime.Now}");
+            progress.Report($"Finished Patentee Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
             return fileRecords;
         }
 
         public static Patentee PatenteeCsvToDbRecord(PatenteeCsv toTransform, string stateDataFileCode)
         {
-            return new Patentee()
+            return new()
             {
                 AccessionNumber = toTransform.accession_nr,
                 DocumentClassCode = toTransform.doc_class_code,
@@ -557,20 +555,60 @@ namespace GloDb
             };
         }
 
-        public static List<PatenteeCsv> PatenteeCsvRecords(string fileName, IProgress<string> progress)
+        public static async Task PatenteeToDb(List<PatenteeCsv> toImport, string stateDataFileCode, string dbName,
+            IProgress<string> progress)
         {
-            progress.Report($"Starting Patentee Csv Import - {DateTime.Now}");
+            var importBatches = toImport.Select(x => PatenteeCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
 
-            var fileRecords = FileRecords<PatenteeCsv>(fileName, progress).ToList();
+            var batchCounter = 1;
 
-            progress.Report($"Finished Patentee Csv Import - {DateTime.Now}");
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report($"Patentee DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.Patentees.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
+        }
+
+        public static async Task PatentToDb(List<PatentCsv> toImport, string stateDataFileCode, string dbName,
+            IProgress<string> progress)
+        {
+            var importBatches = toImport.Select(x => PatentCsvToDbRecord(x, stateDataFileCode)).ToList().Partition(2500)
+                .ToList();
+
+            var batchCounter = 1;
+
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report($"Patent DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
+
+                var context = new GloDataContext(dbName);
+
+                context.Patents.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
+        }
+
+        public static List<WarranteeCsv> WarranteeCsvRecords(string fileName, IProgress<string> progress)
+        {
+            progress.Report($"Starting Warrantee Csv Import - {DateTime.Now}");
+
+            var fileRecords = FileRecords<WarranteeCsv>(fileName, progress).ToList();
+
+            progress.Report($"Finished Warrantee Csv Import - {fileRecords.Count} records found -  {DateTime.Now}");
 
             return fileRecords;
         }
 
         public static Warrantee WarranteeCsvToDbRecord(WarranteeCsv toTransform, string stateDataFileCode)
         {
-            return new Warrantee()
+            return new()
             {
                 AccessionNumber = toTransform.accession_nr,
                 DocumentClassCode = toTransform.doc_class_code,
@@ -582,15 +620,24 @@ namespace GloDb
             };
         }
 
-        public static List<WarranteeCsv> WarranteeCsvRecords(string fileName, IProgress<string> progress)
+        public static async Task WarranteeToDb(List<WarranteeCsv> toImport, string stateDataFileCode, string dbName,
+            IProgress<string> progress)
         {
-            progress.Report($"Starting Warrantee Csv Import - {DateTime.Now}");
+            var importBatches = toImport.Select(x => WarranteeCsvToDbRecord(x, stateDataFileCode)).ToList()
+                .Partition(2500).ToList();
 
-            var fileRecords = FileRecords<WarranteeCsv>(fileName, progress).ToList();
+            var batchCounter = 1;
 
-            progress.Report($"Finished Warrantee Csv Import - {DateTime.Now}");
+            foreach (var importBatch in importBatches)
+            {
+                progress.Report($"Warrantee DB Import - Importing Batch {batchCounter++} of {importBatches.Count}");
 
-            return fileRecords;
+                var context = new GloDataContext(dbName);
+
+                context.Warrantees.AddRange(importBatch);
+
+                await context.SaveChangesAsync(true);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace GloDb
         public DbSet<County> Counties { get; set; }
         public DbSet<CountyLookup> CountyLookups { get; set; }
         public string DbName { get; set; }
-        public DbSet<DocumentClassLookup> DocClassLookups { get; set; }
+        public DbSet<DocumentClassLookup> DocumentClassLookups { get; set; }
         public DbSet<LandDescription> LandDescriptions { get; set; }
         public DbSet<LandOfficeLookup> LandOfficeLookups { get; set; }
         public DbSet<MeridianLookup> MeridianLookups { get; set; }
