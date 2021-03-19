@@ -509,7 +509,7 @@ namespace GloDb
                 GeographicName = toTransform.geographic_name,
                 ImagePageNumber = toTransform.image_page_nr,
                 IndianAllotmentNumber = toTransform.indian_allotment_nr,
-                LOCode = toTransform.l_o_code,
+                LandOfficeCode = toTransform.l_o_code,
                 MetesBounds = toTransform.metes_bounds,
                 MilitaryRank = toTransform.military_rank,
                 Militia = toTransform.militia,

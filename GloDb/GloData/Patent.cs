@@ -17,7 +17,7 @@ namespace GloDb.GloData
         public int Id { get; set; }
         public int ImagePageNumber { get; set; }
         public string IndianAllotmentNumber { get; set; }
-        public int LOCode { get; set; }
+        public int LandOfficeCode { get; set; }
         public bool MetesBounds { get; set; }
         public string MilitaryRank { get; set; }
         public string Militia { get; set; }

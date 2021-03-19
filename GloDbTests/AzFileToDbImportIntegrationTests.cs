@@ -162,9 +162,10 @@ namespace GloDbTests
 
             var context = new GloDataContext(DbFileName);
 
-            var firstDbRecord = context.Counties.Single(x => x.AccessionNumber == "0506-253"
-                                                             && x.DocumentClassCode == "IA" &&
-                                                             x.DescriptionNumber == 1 && x.CountyCode == "019");
+            var firstDbRecord = await context.Counties.SingleAsync(x => x.AccessionNumber == "0506-253"
+                                                                        && x.DocumentClassCode == "IA" &&
+                                                                        x.DescriptionNumber == 1 &&
+                                                                        x.CountyCode == "019");
             var firstDbTestRecord = new County
             {
                 AccessionNumber = "0506-253",
@@ -178,9 +179,10 @@ namespace GloDbTests
             firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var midDbRecord = context.Counties.Single(x => x.AccessionNumber == "AZAZAA 011328  01"
-                                                           && x.DocumentClassCode == "SER" &&
-                                                           x.DescriptionNumber == 1 && x.CountyCode == "019");
+            var midDbRecord = await context.Counties.SingleAsync(x => x.AccessionNumber == "AZAZAA 011328  01"
+                                                                      && x.DocumentClassCode == "SER" &&
+                                                                      x.DescriptionNumber == 1 &&
+                                                                      x.CountyCode == "019");
             var midDbTestRecord = new County
             {
                 AccessionNumber = "AZAZAA 011328  01",
@@ -194,9 +196,10 @@ namespace GloDbTests
             midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var lastDbRecord = context.Counties.Single(x => x.AccessionNumber == "AZPHX 0086517"
-                                                            && x.DocumentClassCode == "SER" &&
-                                                            x.DescriptionNumber == 1 && x.CountyCode == "003");
+            var lastDbRecord = await context.Counties.SingleAsync(x => x.AccessionNumber == "AZPHX 0086517"
+                                                                       && x.DocumentClassCode == "SER" &&
+                                                                       x.DescriptionNumber == 1 &&
+                                                                       x.CountyCode == "003");
             var lastDbTestRecord = new County
             {
                 AccessionNumber = "AZPHX 0086517",
@@ -254,7 +257,7 @@ namespace GloDbTests
 
             var context = new GloDataContext(DbFileName);
 
-            var firstDbRecord = context.CountyLookups.Single(x => x.CountyCode == "000");
+            var firstDbRecord = await context.CountyLookups.SingleAsync(x => x.CountyCode == "000");
             var firstDbTestRecord = new CountyLookup
             {
                 StateCode = "AZ",
@@ -266,7 +269,7 @@ namespace GloDbTests
             firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var midDbRecord = context.CountyLookups.Single(x => x.CountyCode == "019");
+            var midDbRecord = await context.CountyLookups.SingleAsync(x => x.CountyCode == "019");
             var midDbTestRecord = new CountyLookup
             {
                 StateCode = "AZ",
@@ -278,7 +281,7 @@ namespace GloDbTests
             midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var lastDbRecord = context.CountyLookups.Single(x => x.CountyCode == "030");
+            var lastDbRecord = await context.CountyLookups.SingleAsync(x => x.CountyCode == "030");
             var lastDbTestRecord = new CountyLookup
             {
                 StateCode = "AZ",
@@ -334,7 +337,7 @@ namespace GloDbTests
 
             var context = new GloDataContext(DbFileName);
 
-            var firstDbRecord = context.DocumentClassLookups.Single(x => x.DocumentClassCode == "AGS");
+            var firstDbRecord = await context.DocumentClassLookups.SingleAsync(x => x.DocumentClassCode == "AGS");
             var firstDbTestRecord = new DocumentClassLookup
             {
                 DocumentClassCode = "AGS",
@@ -346,7 +349,7 @@ namespace GloDbTests
             firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var midDbRecord = context.DocumentClassLookups.Single(x => x.DocumentClassCode == "FLS");
+            var midDbRecord = await context.DocumentClassLookups.SingleAsync(x => x.DocumentClassCode == "FLS");
             var midDbTestRecord = new DocumentClassLookup
             {
                 DocumentClassCode = "FLS",
@@ -358,7 +361,7 @@ namespace GloDbTests
             midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var lastDbRecord = context.DocumentClassLookups.Single(x => x.DocumentClassCode == "TC");
+            var lastDbRecord = await context.DocumentClassLookups.SingleAsync(x => x.DocumentClassCode == "TC");
             var lastDbTestRecord = new DocumentClassLookup
             {
                 DocumentClassCode = "TC",
@@ -477,7 +480,7 @@ namespace GloDbTests
 
             var context = new GloDataContext(DbFileName);
 
-            var firstDbRecord = context.LandDescriptions.Single(x =>
+            var firstDbRecord = await context.LandDescriptions.SingleAsync(x =>
                 x.AccessionNumber == "0137-231" && x.DocumentClassCode == "TC" && x.DescriptionNumber == 1 &&
                 x.AliquotParts == "NW");
             var firstDbTestRecord = new LandDescription
@@ -503,7 +506,7 @@ namespace GloDbTests
             firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var midDbRecord = context.LandDescriptions.Single(x =>
+            var midDbRecord = await context.LandDescriptions.SingleAsync(x =>
                 x.AccessionNumber == "1189804" && x.DocumentClassCode == "SER" && x.DescriptionNumber == 1 &&
                 x.AliquotParts == "1");
             var midDbTestRecord = new LandDescription
@@ -529,7 +532,7 @@ namespace GloDbTests
             midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var midDbNextSingleRecord = context.LandDescriptions.Single(x =>
+            var midDbNextSingleRecord = await context.LandDescriptions.SingleAsync(x =>
                 x.AccessionNumber == "AZPHX 0086517" && x.DocumentClassCode == "SER" && x.DescriptionNumber == 1 &&
                 x.AliquotParts == "7");
             var midDbNextTestRecord = new LandDescription
@@ -555,7 +558,7 @@ namespace GloDbTests
             midDbNextTestRecord.Should().BeEquivalentTo(midDbNextSingleRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var lastDbRecord = context.LandDescriptions.Single(x =>
+            var lastDbRecord = await context.LandDescriptions.SingleAsync(x =>
                 x.AccessionNumber == "AZPHX 0086517" && x.DocumentClassCode == "SER" && x.DescriptionNumber == 1 &&
                 x.AliquotParts == "7");
             var lastDbTestRecord = new LandDescription
@@ -625,7 +628,7 @@ namespace GloDbTests
 
             var context = new GloDataContext(DbFileName);
 
-            var firstDbRecord = context.LandOfficeLookups.Single(x => x.LandOfficeCode == 1);
+            var firstDbRecord = await context.LandOfficeLookups.SingleAsync(x => x.LandOfficeCode == 1);
             var firstDbTestRecord = new LandOfficeLookup
             {
                 StateCode = "AZ",
@@ -637,7 +640,7 @@ namespace GloDbTests
             firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var midDbRecord = context.LandOfficeLookups.Single(x => x.LandOfficeCode == 4);
+            var midDbRecord = await context.LandOfficeLookups.SingleAsync(x => x.LandOfficeCode == 4);
             var midDbTestRecord = new LandOfficeLookup
             {
                 StateCode = "AZ",
@@ -649,7 +652,7 @@ namespace GloDbTests
             midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
                 .Excluding(x => x.Path == "Id"));
 
-            var lastDbRecord = context.LandOfficeLookups.Single(x => x.LandOfficeCode == 9);
+            var lastDbRecord = await context.LandOfficeLookups.SingleAsync(x => x.LandOfficeCode == 9);
             var lastDbTestRecord = new LandOfficeLookup
             {
                 StateCode = "AZ",
@@ -663,7 +666,7 @@ namespace GloDbTests
         }
 
         [Test]
-        public void H001_AzMeridianLookupImport()
+        public async Task H001_AzMeridianLookupImport()
         {
             var imports =
                 GloCsvFileImporter.MeridianLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -703,10 +706,53 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.MeridianLookupToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = await context.MeridianLookups.SingleAsync(x => x.MeridianCode == 14);
+            var firstDbTestRecord = new MeridianLookup
+            {
+                StateCode = "AZ",
+                MeridianCode = 14,
+                MeridianName = "Gila-Salt River",
+                StateDefault = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = await context.MeridianLookups.SingleAsync(x => x.MeridianCode == 22);
+            var midDbTestRecord = new MeridianLookup
+            {
+                StateCode = "AZ",
+                MeridianCode = 22,
+                MeridianName = "Navajo",
+                StateDefault = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = await context.MeridianLookups.SingleAsync(x => x.MeridianCode == 99);
+            var lastDbTestRecord = new MeridianLookup
+            {
+                StateCode = "AZ",
+                MeridianCode = 99,
+                MeridianName = "No Meridian Available",
+                StateDefault = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void I001_AzPatentImport()
+        public async Task I001_AzPatentImport()
         {
             var imports =
                 GloCsvFileImporter.PatentCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -857,10 +903,166 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.PatentToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = await context.Patents.SingleAsync(x => x.AccessionNumber == "0506-253");
+            var firstDbTestRecord = new Patent
+            {
+                AccessionNumber = "0506-253",
+                DocumentClassCode = "IA",
+                StateCode = "AZ",
+                BlmSerialNumber = string.Empty,
+                AuthorityCode = "253000",
+                DocumentNumber = "0",
+                MiscellaneousDocumentNumber = string.Empty,
+                IndianAllotmentNumber = string.Empty,
+                Tribe = "PAPAGO OR SAN XAVIER",
+                LandOfficeCode = 2,
+                SignaturePresent = true,
+                SignatureDate = DateTime.Parse("10/17/1891 12:00:00 AM"),
+                SubsurfaceReserved = false,
+                MetesBounds = false,
+                SurveyDate = null,
+                UsReservations = false,
+                CancelledDocument = false,
+                GeographicName = string.Empty,
+                TotalAcres = 256,
+                Remarks = string.Empty,
+                VerifyFlag = true,
+                ImagePageNumber = 1,
+                MilitaryRank = string.Empty,
+                Militia = string.Empty,
+                AltAccessionNumber = null,
+                StateInFavorOf = string.Empty,
+                SupremeCourtScriptNumber = string.Empty,
+                CertificateOfLocation = string.Empty,
+                CoalEntryNumber = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = await context.Patents.SingleAsync(x => x.AccessionNumber == "02-91-0001");
+            var midDbTestRecord = new Patent
+            {
+                AccessionNumber = "02-91-0001",
+                DocumentClassCode = "SER",
+                StateCode = "AZ",
+                BlmSerialNumber = "A-23240",
+                AuthorityCode = "255000",
+                DocumentNumber = "0",
+                MiscellaneousDocumentNumber = string.Empty,
+                IndianAllotmentNumber = string.Empty,
+                Tribe = string.Empty,
+                LandOfficeCode = 8,
+                SignaturePresent = true,
+                SignatureDate = DateTime.Parse("10/18/1990 0:00"),
+                SubsurfaceReserved = false,
+                MetesBounds = false,
+                SurveyDate = null,
+                UsReservations = true,
+                CancelledDocument = false,
+                GeographicName = "LAURA MAE #1, #2, #3 AND #4",
+                TotalAcres = 71.7920M,
+                Remarks = "HARBORLITE MILLSITE #1A AND #2A",
+                VerifyFlag = true,
+                ImagePageNumber = 3,
+                MilitaryRank = string.Empty,
+                Militia = string.Empty,
+                AltAccessionNumber = null,
+                StateInFavorOf = string.Empty,
+                SupremeCourtScriptNumber = string.Empty,
+                CertificateOfLocation = string.Empty,
+                CoalEntryNumber = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midTwoDbRecord = await context.Patents.SingleAsync(x => x.AccessionNumber == "0557-120");
+            var midTwoDbTestRecord = new Patent
+            {
+                AccessionNumber = "0557-120",
+                DocumentClassCode = "MW",
+                StateCode = "AZ",
+                BlmSerialNumber = string.Empty,
+                AuthorityCode = "261006",
+                DocumentNumber = "89393",
+                MiscellaneousDocumentNumber = string.Empty,
+                IndianAllotmentNumber = string.Empty,
+                Tribe = string.Empty,
+                LandOfficeCode = 9,
+                SignaturePresent = true,
+                SignatureDate = DateTime.Parse("12/24/1903  12:00:00 AM"),
+                SubsurfaceReserved = false,
+                MetesBounds = false,
+                SurveyDate = null,
+                UsReservations = true,
+                CancelledDocument = false,
+                GeographicName = string.Empty,
+                TotalAcres = 120,
+                Remarks = string.Empty,
+                VerifyFlag = true,
+                ImagePageNumber = 1,
+                MilitaryRank = "WARRIOR",
+                Militia = "CAPTAIN SPOAKOKEE MICCOS COMPANY CREEK VOLUNTEERS",
+                AltAccessionNumber = null,
+                StateInFavorOf = string.Empty,
+                SupremeCourtScriptNumber = string.Empty,
+                CertificateOfLocation = string.Empty,
+                CoalEntryNumber = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            midTwoDbTestRecord.Should().BeEquivalentTo(midTwoDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = await context.Patents.SingleAsync(x => x.AccessionNumber == "AZPHX 0086517");
+            var lastDbTestRecord = new Patent
+            {
+                AccessionNumber = "AZPHX 0086517",
+                DocumentClassCode = "SER",
+                StateCode = "AZ",
+                BlmSerialNumber = "AZPHX 0086517",
+                AuthorityCode = "262200",
+                DocumentNumber = string.Empty,
+                MiscellaneousDocumentNumber = string.Empty,
+                IndianAllotmentNumber = string.Empty,
+                Tribe = string.Empty,
+                LandOfficeCode = 8,
+                SignaturePresent = true,
+                SignatureDate = DateTime.Parse("10/5/1951  12:00:00 AM"),
+                SubsurfaceReserved = false,
+                MetesBounds = false,
+                SurveyDate = null,
+                UsReservations = true,
+                CancelledDocument = false,
+                GeographicName = string.Empty,
+                TotalAcres = 40,
+                Remarks = string.Empty,
+                VerifyFlag = false,
+                ImagePageNumber = 0,
+                MilitaryRank = string.Empty,
+                Militia = string.Empty,
+                AltAccessionNumber = null,
+                StateInFavorOf = string.Empty,
+                SupremeCourtScriptNumber = string.Empty,
+                CertificateOfLocation = string.Empty,
+                CoalEntryNumber = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void J001_AzPatenteeImport()
+        public async Task J001_AzPatenteeImport()
         {
             var imports =
                 GloCsvFileImporter.PatenteeCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -906,10 +1108,64 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.PatenteeToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord =
+                await context.Patentees.SingleAsync(x =>
+                    x.AccessionNumber == "0137-231" && x.PatenteeSequenceNumber == 1);
+            var firstDbTestRecord = new Patentee
+            {
+                AccessionNumber = "0137-231",
+                DocumentClassCode = "TC",
+                PatenteeSequenceNumber = 1,
+                PatenteeLastName = "HOLCOMB",
+                PatenteeFirstName = "JAMES",
+                PatenteeMiddleName = "P",
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord =
+                await context.Patentees.SingleAsync(x =>
+                    x.AccessionNumber == "881526" && x.PatenteeSequenceNumber == 3);
+            var midDbTestRecord = new Patentee
+            {
+                AccessionNumber = "881526",
+                DocumentClassCode = "SER",
+                PatenteeSequenceNumber = 3,
+                PatenteeLastName = "BALDWIN",
+                PatenteeFirstName = "CLARENCE",
+                PatenteeMiddleName = "A",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = await context.Patentees.SingleAsync(x =>
+                x.AccessionNumber == "AZPHX 0086517" && x.PatenteeSequenceNumber == 1);
+            var lastDbTestRecord = new Patentee
+            {
+                AccessionNumber = "AZPHX 0086517",
+                DocumentClassCode = "SER",
+                PatenteeSequenceNumber = 1,
+                PatenteeLastName = "ARIZONA STATE OF",
+                PatenteeFirstName = string.Empty,
+                PatenteeMiddleName = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void J001_AzWarranteeImport()
+        public async Task J001_AzWarranteeImport()
         {
             var imports =
                 GloCsvFileImporter.WarranteeCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -955,6 +1211,60 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.WarranteeToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = await context.Warrantees.SingleAsync(x =>
+                x.AccessionNumber == "0557-120" && x.WarranteeSequenceNumber == 1);
+            var firstDbTestRecord = new Warrantee
+            {
+                AccessionNumber = "0557-120",
+                DocumentClassCode = "MW",
+                WarranteeSequenceNumber = 1,
+                WarranteeLastName = "ARARTE",
+                WarranteeFirstName = string.Empty,
+                WarranteeMiddleName = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord =
+                await context.Warrantees.SingleAsync(x =>
+                    x.AccessionNumber == "0564-467" && x.WarranteeSequenceNumber == 1);
+            var midDbTestRecord = new Warrantee
+            {
+                AccessionNumber = "0564-467",
+                DocumentClassCode = "MW",
+                WarranteeSequenceNumber = 1,
+                WarranteeLastName = "VAN ALSTINE",
+                WarranteeFirstName = "NELSON",
+                WarranteeMiddleName = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord =
+                await context.Warrantees.SingleAsync(x =>
+                    x.AccessionNumber == "846372" && x.WarranteeSequenceNumber == 1);
+            var lastDbTestRecord = new Warrantee
+            {
+                AccessionNumber = "846372",
+                DocumentClassCode = "SER",
+                WarranteeSequenceNumber = 1,
+                WarranteeLastName = "HAWKE",
+                WarranteeFirstName = "WILLIAM",
+                WarranteeMiddleName = "A",
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [SetUp]
