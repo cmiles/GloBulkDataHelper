@@ -154,9 +154,10 @@ namespace GloDb.Queries
         {
             var landDescriptions = context.LandDescriptions.Where(x =>
                     x.MeridianCode == meridian && x.TownshipNumber != null && x.TownshipNumber >= minimumTownship &&
-                    x.TownshipNumber <= maximumTownship && x.TownshipDir == townshipDirection &&
+                    x.TownshipNumber <= maximumTownship && x.TownshipDirection == townshipDirection &&
                     x.RangeNumber != null &&
-                    x.RangeNumber >= minimumRange && x.RangeNumber <= maximumRange && x.RangeDir == rangeDirection)
+                    x.RangeNumber >= minimumRange && x.RangeNumber <= maximumRange &&
+                    x.RangeDirection == rangeDirection)
                 .ToList();
 
             if (!landDescriptions.Any()) return new List<GloDataQueryResult.GloDataQueryResult>();

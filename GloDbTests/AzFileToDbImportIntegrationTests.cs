@@ -12,13 +12,12 @@ using Serilog;
 
 namespace GloDbTests
 {
-    public class AzFileImportTests : IProgress<string>
+    public class AzFileToDbImportIntegrationTests : IProgress<string>
     {
+        public const string StateDataFileValue = "AZ Test File";
         public string DbFileName { get; set; }
         public string TestDirectory { get; set; }
         public string TestFileDirectory { get; set; }
-
-        public const string StateDataFileValue = "AZ Test File";
 
         public void Report(string value)
         {
@@ -115,7 +114,7 @@ namespace GloDbTests
         }
 
         [Test]
-        public void C001_CountyFileCsvRecordsImport()
+        public async Task C001_CountyFileCsvRecordsImport()
         {
             var imports =
                 GloCsvFileImporter.CountyCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -158,10 +157,62 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.CountyToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = context.Counties.Single(x => x.AccessionNumber == "0506-253"
+                                                             && x.DocumentClassCode == "IA" &&
+                                                             x.DescriptionNumber == 1 && x.CountyCode == "019");
+            var firstDbTestRecord = new County
+            {
+                AccessionNumber = "0506-253",
+                DocumentClassCode = "IA",
+                DescriptionNumber = 1,
+                StateCode = "AZ",
+                CountyCode = "019",
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = context.Counties.Single(x => x.AccessionNumber == "AZAZAA 011328  01"
+                                                           && x.DocumentClassCode == "SER" &&
+                                                           x.DescriptionNumber == 1 && x.CountyCode == "019");
+            var midDbTestRecord = new County
+            {
+                AccessionNumber = "AZAZAA 011328  01",
+                DocumentClassCode = "SER",
+                DescriptionNumber = 1,
+                StateCode = "AZ",
+                CountyCode = "019",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = context.Counties.Single(x => x.AccessionNumber == "AZPHX 0086517"
+                                                            && x.DocumentClassCode == "SER" &&
+                                                            x.DescriptionNumber == 1 && x.CountyCode == "003");
+            var lastDbTestRecord = new County
+            {
+                AccessionNumber = "AZPHX 0086517",
+                DocumentClassCode = "SER",
+                DescriptionNumber = 1,
+                StateCode = "AZ",
+                CountyCode = "003",
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void D001_CountyLookupFileCsvRecordsImport()
+        public async Task D001_CountyLookupFileCsvRecordsImport()
         {
             var imports =
                 GloCsvFileImporter.CountyLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -198,10 +249,50 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.CountyLookupToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = context.CountyLookups.Single(x => x.CountyCode == "000");
+            var firstDbTestRecord = new CountyLookup
+            {
+                StateCode = "AZ",
+                CountyCode = "000",
+                CountyName = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = context.CountyLookups.Single(x => x.CountyCode == "019");
+            var midDbTestRecord = new CountyLookup
+            {
+                StateCode = "AZ",
+                CountyCode = "019",
+                CountyName = "Pima",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = context.CountyLookups.Single(x => x.CountyCode == "030");
+            var lastDbTestRecord = new CountyLookup
+            {
+                StateCode = "AZ",
+                CountyCode = "030",
+                CountyName = string.Empty,
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void E001_DocClassLookupFileCsvRecordsImport()
+        public async Task E001_DocClassLookupFileCsvRecordsImport()
         {
             var imports =
                 GloCsvFileImporter.DocumentClassLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -238,10 +329,50 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.DocumentClassLookupToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = context.DocumentClassLookups.Single(x => x.DocumentClassCode == "AGS");
+            var firstDbTestRecord = new DocumentClassLookup
+            {
+                DocumentClassCode = "AGS",
+                DocumentClassDescription = "Agricultural Scrip Patent",
+                DocumentClassDisplayName = "Agricultural Scrip",
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = context.DocumentClassLookups.Single(x => x.DocumentClassCode == "FLS");
+            var midDbTestRecord = new DocumentClassLookup
+            {
+                DocumentClassCode = "FLS",
+                DocumentClassDescription = "Forest Lieu Selection Patent",
+                DocumentClassDisplayName = "Forest Lieu Selection",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = context.DocumentClassLookups.Single(x => x.DocumentClassCode == "TC");
+            var lastDbTestRecord = new DocumentClassLookup
+            {
+                DocumentClassCode = "TC",
+                DocumentClassDescription = "Timber Culture Patent",
+                DocumentClassDisplayName = "Timber Culture",
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void F001_LandDescriptionFileCsvRecordsImport()
+        public async Task F001_LandDescriptionFileCsvRecordsImport()
         {
             var imports =
                 GloCsvFileImporter.LandDescriptionCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -342,11 +473,117 @@ namespace GloDbTests
 
             Assert.AreEqual(lastTestRecord, lastRecord);
 
+            await GloCsvFileImporter.LandDescriptionToDb(imports, StateDataFileValue, DbFileName, this);
 
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = context.LandDescriptions.Single(x =>
+                x.AccessionNumber == "0137-231" && x.DocumentClassCode == "TC" && x.DescriptionNumber == 1 &&
+                x.AliquotParts == "NW");
+            var firstDbTestRecord = new LandDescription
+            {
+                AccessionNumber = "0137-231",
+                DocumentClassCode = "TC",
+                DescriptionNumber = 1,
+                AliquotParts = "NW",
+                SectionNumber = 32,
+                TownshipNumber = 2,
+                TownshipDirection = "N",
+                RangeNumber = 3,
+                RangeDirection = "E",
+                BlockNumber = string.Empty,
+                FractionalSection = "N",
+                SurveyNumber = string.Empty,
+                MeridianCode = 14,
+                LandDescriptionRemarks = string.Empty,
+                StateCode = "AZ",
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = context.LandDescriptions.Single(x =>
+                x.AccessionNumber == "1189804" && x.DocumentClassCode == "SER" && x.DescriptionNumber == 1 &&
+                x.AliquotParts == "1");
+            var midDbTestRecord = new LandDescription
+            {
+                AccessionNumber = "1189804",
+                DocumentClassCode = "SER",
+                DescriptionNumber = 1,
+                AliquotParts = "1",
+                SectionNumber = 27,
+                TownshipNumber = 19,
+                TownshipDirection = "S",
+                RangeNumber = 7,
+                RangeDirection = "E",
+                BlockNumber = string.Empty,
+                FractionalSection = "N",
+                SurveyNumber = string.Empty,
+                MeridianCode = 14,
+                LandDescriptionRemarks = "LOT 1 OR SOUTH HALF OF SE QUARTER\nSUBJECT TO RIGHTS AND R-O-W S",
+                StateCode = "AZ",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbNextSingleRecord = context.LandDescriptions.Single(x =>
+                x.AccessionNumber == "AZPHX 0086517" && x.DocumentClassCode == "SER" && x.DescriptionNumber == 1 &&
+                x.AliquotParts == "7");
+            var midDbNextTestRecord = new LandDescription
+            {
+                AccessionNumber = "AZPHX 0086517",
+                DocumentClassCode = "SER",
+                DescriptionNumber = 1,
+                AliquotParts = "7",
+                SectionNumber = 6,
+                TownshipNumber = 24,
+                TownshipDirection = "S",
+                RangeNumber = 29,
+                RangeDirection = "E",
+                BlockNumber = string.Empty,
+                FractionalSection = "N",
+                SurveyNumber = string.Empty,
+                MeridianCode = 14,
+                LandDescriptionRemarks = "LOT 7 OR NESW QUARTER",
+                StateCode = "AZ",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbNextTestRecord.Should().BeEquivalentTo(midDbNextSingleRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = context.LandDescriptions.Single(x =>
+                x.AccessionNumber == "AZPHX 0086517" && x.DocumentClassCode == "SER" && x.DescriptionNumber == 1 &&
+                x.AliquotParts == "7");
+            var lastDbTestRecord = new LandDescription
+            {
+                AccessionNumber = "AZPHX 0086517",
+                DocumentClassCode = "SER",
+                DescriptionNumber = 1,
+                AliquotParts = "7",
+                SectionNumber = 6,
+                TownshipNumber = 24,
+                TownshipDirection = "S",
+                RangeNumber = 29,
+                RangeDirection = "E",
+                BlockNumber = string.Empty,
+                FractionalSection = "N",
+                SurveyNumber = string.Empty,
+                MeridianCode = 14,
+                LandDescriptionRemarks = "LOT 7 OR NESW QUARTER",
+                StateCode = "AZ",
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]
-        public void G001_LandOfficeLookupFileCsvRecordsImport()
+        public async Task G001_LandOfficeLookupFileCsvRecordsImport()
         {
             var imports =
                 GloCsvFileImporter.LandOfficeLookupCsvRecords(Path.Combine(TestDirectory, TestFileDirectory,
@@ -383,6 +620,46 @@ namespace GloDbTests
             };
 
             Assert.AreEqual(lastTestRecord, lastRecord);
+
+            await GloCsvFileImporter.LandOfficeLookupToDb(imports, StateDataFileValue, DbFileName, this);
+
+            var context = new GloDataContext(DbFileName);
+
+            var firstDbRecord = context.LandOfficeLookups.Single(x => x.LandOfficeCode == 1);
+            var firstDbTestRecord = new LandOfficeLookup
+            {
+                StateCode = "AZ",
+                LandOfficeCode = 1,
+                LandOfficeDescription = "Arizona",
+                StateDataFile = StateDataFileValue
+            };
+
+            firstDbTestRecord.Should().BeEquivalentTo(firstDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var midDbRecord = context.LandOfficeLookups.Single(x => x.LandOfficeCode == 4);
+            var midDbTestRecord = new LandOfficeLookup
+            {
+                StateCode = "AZ",
+                LandOfficeCode = 4,
+                LandOfficeDescription = "Gen Land Office",
+                StateDataFile = StateDataFileValue
+            };
+
+            midDbTestRecord.Should().BeEquivalentTo(midDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
+
+            var lastDbRecord = context.LandOfficeLookups.Single(x => x.LandOfficeCode == 9);
+            var lastDbTestRecord = new LandOfficeLookup
+            {
+                StateCode = "AZ",
+                LandOfficeCode = 9,
+                LandOfficeDescription = "Tucson",
+                StateDataFile = StateDataFileValue
+            };
+
+            lastDbTestRecord.Should().BeEquivalentTo(lastDbRecord, option => option
+                .Excluding(x => x.Path == "Id"));
         }
 
         [Test]

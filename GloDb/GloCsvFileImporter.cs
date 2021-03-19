@@ -75,7 +75,7 @@ namespace GloDb
                 AccessionNumber = toTransform.accession_nr,
                 CountyCode = toTransform.county_code,
                 DescriptionNumber = toTransform.descrip_nr,
-                DocClassCode = toTransform.doc_class_code,
+                DocumentClassCode = toTransform.doc_class_code,
                 StateCode = toTransform.state_code,
                 StateDataFile = stateDataFileCode
             };
@@ -357,14 +357,14 @@ namespace GloDb
                 DescriptionNumber = toTransform.descrip_nr,
                 DocumentClassCode = toTransform.doc_class_code,
                 FractionalSection = toTransform.fractional_section,
-                LdRemarks = toTransform.ld_remarks,
+                LandDescriptionRemarks = toTransform.ld_remarks,
                 MeridianCode = toTransform.meridian_code,
-                RangeDir = toTransform.range_dir,
+                RangeDirection = toTransform.range_dir,
                 RangeNumber = toTransform.range_nr,
                 SectionNumber = toTransform.section_nr,
                 StateCode = toTransform.state_code,
                 SurveyNumber = toTransform.survey_nr,
-                TownshipDir = toTransform.township_dir,
+                TownshipDirection = toTransform.township_dir,
                 TownshipNumber = toTransform.township_nr,
                 StateDataFile = stateDataFileCode
             };
