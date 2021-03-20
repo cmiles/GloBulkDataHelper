@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-preview.1.21102.2" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.0.5-pre20210119130047" />
+    <PackageReference Include="ValueInjecter" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GloBulkDataHelper.Logging\GloBulkDataHelper.Logging.csproj" />
+  </ItemGroup>
+
+</Project>

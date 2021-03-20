@@ -2,7 +2,7 @@
 using Serilog;
 using Serilog.Formatting.Compact;
 
-namespace GloDb
+namespace GloBulkDataHelper.Logging
 {
     public static class Logging
     {

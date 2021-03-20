@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GloDb.FindLdCache
+namespace GloBulkDataHelper.GloDb.FindLdCache
 {
     public class FindLdCacheErrorLog
     {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace GloDb.FindLd
+// ReSharper disable InconsistentNaming - match response names
+
+namespace GloBulkDataHelper.BlmNavigatorService.FindLd
 {
     public class LdGeometry
     {

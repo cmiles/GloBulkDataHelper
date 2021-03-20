@@ -3,14 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using GloDb;
-using GloDb.GloCsvFile;
-using GloDb.GloData;
+using GloBulkDataHelper.GloDb;
+using GloBulkDataHelper.GloDb.GloCsvFile;
+using GloBulkDataHelper.GloDb.GloData;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Serilog;
 
-namespace GloDbTests
+namespace GloBulkDataHelper.GloDbTests
 {
     public class AzFileToDbImportIntegrationTests : IProgress<string>
     {
@@ -1273,7 +1273,7 @@ namespace GloDbTests
             TestDirectory = AppDomain.CurrentDomain.BaseDirectory;
             TestFileDirectory = "Az-2021-03-01-TestData";
             DbFileName = Path.Combine(TestDirectory, $"Test-AZ-2021-03-01-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.db");
-            Logging.StandardConfiguration("Test-AZ-2021-03-01");
+            Logging.Logging.StandardConfiguration("Test-AZ-2021-03-01");
             var contextForSetup = new GloDataContext($"Test-AZ-2021-03-01-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.db");
             contextForSetup.Database.EnsureCreated();
         }

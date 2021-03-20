@@ -1,7 +1,7 @@
-﻿using GloDb.FindLdCache;
+﻿using GloBulkDataHelper.GloDb.FindLdCache;
 using Microsoft.EntityFrameworkCore;
 
-namespace GloDb
+namespace GloBulkDataHelper.GloDb
 {
     public class FindLdCacheContext : DbContext
     {

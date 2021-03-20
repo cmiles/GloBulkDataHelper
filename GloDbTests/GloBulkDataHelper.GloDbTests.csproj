@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GloDb\GloDb.csproj" />
+    <ProjectReference Include="..\GloDb\GloBulkDataHelper.GloDb.csproj" />
   </ItemGroup>
 
 </Project>

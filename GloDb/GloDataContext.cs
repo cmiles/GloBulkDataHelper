@@ -1,7 +1,7 @@
-﻿using GloDb.GloData;
+﻿using GloBulkDataHelper.GloDb.GloData;
 using Microsoft.EntityFrameworkCore;
 
-namespace GloDb
+namespace GloBulkDataHelper.GloDb
 {
     public class GloDataContext : DbContext
     {

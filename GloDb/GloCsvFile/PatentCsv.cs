@@ -2,7 +2,7 @@
 
 using System;
 
-namespace GloDb.GloCsvFile
+namespace GloBulkDataHelper.GloDb.GloCsvFile
 {
     public record PatentCsv
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GloDb
+namespace GloBulkDataHelper.GloDb
 {
     public static class Extensions
     {

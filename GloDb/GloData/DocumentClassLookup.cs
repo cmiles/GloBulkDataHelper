@@ -1,4 +1,4 @@
-﻿namespace GloDb.GloData
+﻿namespace GloBulkDataHelper.GloDb.GloData
 {
     public class DocumentClassLookup
     {

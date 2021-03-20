@@ -1,6 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming - Matching Names in Actual File
 
-namespace GloDb.GloCsvFile
+namespace GloBulkDataHelper.GloDb.GloCsvFile
 {
     public record CountyCsv
     {
