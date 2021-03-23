@@ -63,9 +63,8 @@ namespace GloBulkDataHelper.BlmNavigatorService
 
             foreach (var loopFeatures in ld.features)
             {
-                var coordinateTransform = transformCoordinateFactory.CreateFromCoordinateSystems(
-                    SridReader.GetCSbyID(loopFeatures.geometry.spatialReference.latestWkid),
-                    SridReader.GetCSbyID(4326));
+                var coordinateTransform =
+                    CoordinateHelpers.CoordinateTransformTo4326(loopFeatures.geometry.spatialReference.latestWkid);
 
                 var ringList = new List<LinearRing>();
 

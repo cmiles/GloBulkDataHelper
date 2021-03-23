@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ProjNet.CoordinateSystems;
+using ProjNet.CoordinateSystems.Transformations;
 
 // ReSharper disable InconsistentNaming
 
@@ -54,22 +55,34 @@ namespace GloBulkDataHelper.BlmNavigatorService
     //    }
     //}
 
-    public class SridReader
+    public static class CoordinateHelpers
     {
         /// <summary>Gets a coordinate system from the SRID.csv file</summary>
         /// <param name="id">EPSG ID</param>
         /// <returns>Coordinate system, or null if SRID was not found.</returns>
-        public static CoordinateSystem GetCSbyID(int id)
+        public static CoordinateSystem CoordinateSystemFromSrid(int id)
         {
-            return (from wkt in GetSRIDs()
+            return (from wkt in SridWktFromReferenceFile()
                 where wkt.WKID == id
                 let x = new CoordinateSystemFactory()
                 select x.CreateFromWkt(wkt.WKT)).FirstOrDefault();
         }
 
+        public static ICoordinateTransformation CoordinateTransform(int fromSrid, int toSrid)
+        {
+            return new CoordinateTransformationFactory().CreateFromCoordinateSystems(CoordinateSystemFromSrid(fromSrid),
+                CoordinateSystemFromSrid(toSrid));
+        }
+
+        public static ICoordinateTransformation CoordinateTransformTo4326(int fromSrid)
+        {
+            return new CoordinateTransformationFactory().CreateFromCoordinateSystems(CoordinateSystemFromSrid(fromSrid),
+                CoordinateSystemFromSrid(4326));
+        }
+
         /// <summary>Enumerates all SRIDs in the SRID.csv file.</summary>
         /// <returns>Enumerator</returns>
-        public static IEnumerable<WktString> GetSRIDs()
+        private static IEnumerable<WktString> SridWktFromReferenceFile()
         {
             using var sr = File.OpenText(Path.Combine(AppContext.BaseDirectory, "SRID.csv"));
             while (!sr.EndOfStream)
