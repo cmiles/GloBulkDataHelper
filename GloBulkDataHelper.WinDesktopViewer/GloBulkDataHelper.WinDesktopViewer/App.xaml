@@ -1,15 +1,15 @@
 ﻿<Application
-    x:Class="GloBulkDataHelper.GloDataDesktopView.App"
+    x:Class="GloBulkDataHelper.WinDesktopViewer.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:GloBulkDataHelper.GloDataDesktopView">
+    xmlns:local="using:GloBulkDataHelper.WinDesktopViewer">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
+                <!--  Other merged dictionaries here  -->
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+            <!--  Other app resources here  -->
         </ResourceDictionary>
     </Application.Resources>
 </Application>
