@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloBulkDataHelper.Logging",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlmNavigatorServiceTests", "GloBulkDataHelper.BlmNavigatorServiceTests\BlmNavigatorServiceTests.csproj", "{19641004-05F4-412A-9342-6A9B48A9F740}"
 EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "GloBulkDataHelper.WinDesktopViewer (Package)", "GloBulkDataHelper.WinDesktopViewer\GloBulkDataHelper.WinDesktopViewer (Package)\GloBulkDataHelper.WinDesktopViewer (Package).wapproj", "{4B19894E-9ADE-4C76-9768-ECCB75EB0DD2}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "GloBulkDataHelper.WinDesktopViewer (Package)", "GloBulkDataHelper.WinDesktopViewer (Package)\GloBulkDataHelper.WinDesktopViewer (Package).wapproj", "{4B19894E-9ADE-4C76-9768-ECCB75EB0DD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloBulkDataHelper.WinDesktopViewer", "GloBulkDataHelper.WinDesktopViewer\GloBulkDataHelper.WinDesktopViewer\GloBulkDataHelper.WinDesktopViewer.csproj", "{A7DB3562-1C1B-48D6-98C0-D422504DCD0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloBulkDataHelper.WinDesktopViewer", "GloBulkDataHelper.WinDesktopViewer\GloBulkDataHelper.WinDesktopViewer.csproj", "{A7DB3562-1C1B-48D6-98C0-D422504DCD0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloBulkDataHelper.Generators", "GloBulkDataHelper.Generators\GloBulkDataHelper.Generators.csproj", "{9F177283-A3C1-450C-945B-E30C68A7C952}"
 EndProject
